@@ -17,6 +17,7 @@ menu = True
 comando = 0
 
 # SE ESISTE, IMPORTO LA LISTA PREESISTENTE, ALTRIMENTI LA CREO DOPO
+print("Benvenuto nell'archivio film e serie TV, carico la lista...\n")
 exist = os.path.isfile(filename)
 if exist:
     with open("list.list", 'rb') as textfileread:
@@ -38,8 +39,6 @@ else:
 
 
 #INIZIO PROGRAMMA
-print("Benvenuto nell'archivio film e serie TV, carico la lista...\n")
-
 while program:
     menustampa = True
     menucerca = True
@@ -168,7 +167,7 @@ while program:
           lista = pickle.load(textfile)
 
         while menucerca:
-            print("1. Cerca per titolo\n" + "2. Cerca per piattaforma\n" + "3. Torna al menu principale\n")
+            print("\n1. Cerca per titolo\n" + "2. Cerca per piattaforma\n" + "3. Torna al menu principale\n")
             comandocerca = input("Seleziona un'azione:\n")
             if comandocerca != "1" and comandocerca != "2" and comandocerca != "3":
                 print("Inserisci un valore corretto!\n")
@@ -196,7 +195,7 @@ while program:
             if trovato == False:
                 print("Nessun risultato.\n")
             else:
-                print("\n")
+                continue
 
         if comandocerca == 2:
             trovato = False
@@ -216,7 +215,7 @@ while program:
                     if trovato == False:
                         print("Nessun risultato.\n")
                     else:
-                        print("\n")
+                        continue
                 else:
                     continue
 
@@ -231,15 +230,34 @@ while program:
         with open(filename, 'rb') as textfile:
           lista = pickle.load(textfile)
 
+        IDtempfilm = 1
+        IDtempserie = 1
         contatore = 1
+
         for i in lista:
 
+            # AGGIORNO DI NUOVO ID DEI TITOLI
+            # QUANDO CANCELLO UN TITOLO NEL MEZZO DELLA LISTA HO BISOGNO DI RISCALARE TUTTI I TITOLI SUCCESSIVI DI UNA POSIZIONE IN ALTO!
+            if flag in i['tipo']:
+                if i['IDfilm'] != IDtempfilm:
+                    i['IDfilm'] = IDtempfilm
+                    IDtempfilm += 1
+                else:
+                    IDtempfilm += 1
+            elif flag in i['tipo']:
+                if i['IDserie'] != IDtempserie:
+                    i['IDserie'] = IDtempserie
+                    IDtempserie += 1
+                else:
+                    IDtempserie += 1
             if flag in i['tipo']:
                 print(str(contatore) + '. ' + str(i['titolo']))
                 contatore += 1
 
+
         comandorimuovi = input("Digita il numero del titolo da rimuovere\n")
 
+        #RIMOZIONE
         for y in lista:
             if flag in y['tipo']:
                 if comandorimuovi in str(y['IDfilm']):
@@ -248,6 +266,7 @@ while program:
                 if comandorimuovi in str(y['IDserie']):
                     lista.remove(y)
 
+
         while nuovaeliminazione:
             conferma = input("Desideri rimuovere un altro elemento? (Y/N)\n")
             conferma = conferma.casefold()
@@ -255,8 +274,27 @@ while program:
                 nuovaeliminazione = False
                 break
             elif conferma == 'n':
+                IDtempfilm = 1
+                IDtempserie = 1
+                #AGGIORNO DI NUOVO ID DEI TITOLI
+                #QUANDO CANCELLO UN TITOLO NEL MEZZO DELLA LISTA HO BISOGNO DI RISCALARE TUTTI I TITOLI SUCCESSIVI DI UNA POSIZIONE IN ALTO!
+                for i in lista:
+                    if flag in i['tipo']:
+                        if i['IDfilm'] != IDtempfilm:
+                            i['IDfilm'] = IDtempfilm
+                            IDtempfilm += 1
+                        else:
+                            IDtempfilm += 1
+                    elif flag in i['tipo']:
+                        if i['IDserie'] != IDtempserie:
+                            i['IDserie'] = IDtempserie
+                            IDtempserie += 1
+                        else:
+                            IDtempserie += 1
                 comando = 0
                 nuovaeliminazione = False
+
+
                 with open(filename, 'wb') as textfile:  # salvo ed esco
                     pickle.dump(lista, textfile)
                 menu = True
