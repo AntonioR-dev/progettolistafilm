@@ -11,16 +11,16 @@ IDserie = 1
 lista = []
 dict = {}
 
-filename = "list.list"
+filename = "list.txt"
 program = True
 menu = True
 comando = 0
 
 # SE ESISTE, IMPORTO LA LISTA PREESISTENTE, ALTRIMENTI LA CREO DOPO
-print("Benvenuto nell'archivio film e serie TV, carico la lista...\n")
+print("Benvenuto nell'archivio film e serie TV, carico la lista...")
 exist = os.path.isfile(filename)
 if exist:
-    with open("list.list", 'rb') as textfileread:
+    with open(filename, 'rb') as textfileread:
         lista = pickle.load(textfileread)
 
         # RECUPERO IL VALORE DELL'ULTIMO ID DELLA LISTA CARICATA E LO INCREMENTO DI 1
@@ -32,11 +32,9 @@ if exist:
         IDfilm = int(IDfilm)
         IDfilm += 1
 else:
-    print("Primo avvio, l'archivio è VUOTO\n")
+    print("\nPrimo avvio, l'archivio è VUOTO")
     with open(filename, 'wb') as textfile:
         pickle.dump(lista, textfile)
-
-
 
 #INIZIO PROGRAMMA
 while program:
@@ -46,7 +44,7 @@ while program:
 
     #MENU PRINCIPALE
     while menu:
-        print("1. Lista film\n" +
+        print("\n1. Lista film\n" +
               "2. Lista serie TV\n" +
               "3. Esci")
 
@@ -63,7 +61,7 @@ while program:
         if comandomenu == 1:
             flag = "film"
             while wait:
-                print("1. Aggiungi un film alla lista\n" +
+                print("\n1. Aggiungi un film alla lista\n" +
                     "2. Visualizza la lista\n" +
                         "3. Cerca nella lista\n" +
                         "4. Rimuovi elementi dalla lista\n" +
@@ -83,7 +81,7 @@ while program:
         elif comandomenu == 2:
             flag = "serietv"
             while wait:
-                print("1. Aggiungi una serie TV alla lista\n" +
+                print("\n1. Aggiungi una serie TV alla lista\n" +
                     "2. Visualizza la lista\n" +
                         "3. Cerca nella lista\n" +
                         "4. Rimuovi elementi dalla lista\n" +
@@ -91,7 +89,7 @@ while program:
 
                 comando = input("Seleziona un'azione:\n")
                 if comando != "1" and comando != "2" and comando != "3" and comando != "4" and comando != "5":
-                    print("Inserisci un valore corretto!\n")
+                    print("Inserisci un valore corretto!")
                     continue
                 else:
                     comando = int(comando)
@@ -106,7 +104,7 @@ while program:
 
     #INSERIMENTO TITOLI
     while comando == 1:
-        titolo = input("Inserisci il titolo (digita X per uscire):\n")
+        titolo = input("\nInserisci il titolo (digita X per uscire):")
         if titolo == "X" or titolo == "x":
             with open(filename, 'wb') as textfile: #salvo ed esco
                 pickle.dump(lista, textfile)
@@ -129,10 +127,10 @@ while program:
         with open(filename, 'rb') as textfile:
           lista = pickle.load(textfile)
         while menustampa:
-            print("1. Stampa tutti i titoli\n" + "2. Torna al menu principale\n" )
+            print("\n1. Stampa tutti i titoli\n" + "2. Torna al menu principale" )
             comandostampa = input("Seleziona un'azione:\n")
             if comandostampa != "1" and comandostampa != "2" and comandostampa != "3":
-                print("Inserisci un valore corretto!\n")
+                print("Inserisci un valore corretto!")
                 continue
             else:
                 comandostampa = int(comandostampa)
@@ -145,13 +143,13 @@ while program:
             if flag == "film":
                 for i in lista:
                     if flag in i['tipo']:
-                        print(str(i["IDfilm"]) + '. ' + str(i['titolo']) + ' Piattaforma/e: ' + str(i['piattaforma']))
+                        print("\n" + str(i["IDfilm"]) + '. ' + str(i['titolo']) + ' Piattaforma/e: ' + str(i['piattaforma']))
                     else:
                         continue
             elif flag == "serietv":
                 for i in lista:
                     if flag in i['tipo']:
-                        print(str(i["IDserie"]) + '. ' + str(i['titolo']) + ' Piattaforma/e: ' + str(i['piattaforma']))
+                        print("\n" + str(i["IDserie"]) + '. ' + str(i['titolo']) + ' Piattaforma/e: ' + str(i['piattaforma']))
                     else:
                         continue
             print("\n")
