@@ -5,6 +5,7 @@ LISTA FILM
 
 import pickle
 import os
+import random
 
 IDfilm = 1
 IDserie = 1
@@ -62,13 +63,14 @@ while program:
             flag = "film"
             while wait:
                 print("\n1. Aggiungi un film alla lista\n" +
-                    "2. Visualizza la lista\n" +
+                        "2. Visualizza la lista\n" +
                         "3. Cerca nella lista\n" +
                         "4. Rimuovi elementi dalla lista\n" +
-                        "5 Torna al menu\n")
+                        "5. Estrai un titolo casuale\n" +
+                        "6. Torna al menu principale")
 
                 comando = input("Seleziona un'azione:\n")
-                if comando != "1" and comando != "2" and comando != "3" and comando != "4" and comando != "5":
+                if comando != "1" and comando != "2" and comando != "3" and comando != "4" and comando != "5" and comando != "6":
                     print("Inserisci un valore corretto!\n")
                     continue
                 else:
@@ -104,7 +106,7 @@ while program:
 
     #INSERIMENTO TITOLI
     while comando == 1:
-        titolo = input("\nInserisci il titolo (digita X per uscire):")
+        titolo = input("\nInserisci il titolo (digita X per uscire):\n")
         if titolo == "X" or titolo == "x":
             with open(filename, 'wb') as textfile: #salvo ed esco
                 pickle.dump(lista, textfile)
@@ -143,13 +145,13 @@ while program:
             if flag == "film":
                 for i in lista:
                     if flag in i['tipo']:
-                        print("\n" + str(i["IDfilm"]) + '. ' + str(i['titolo']) + ' Piattaforma/e: ' + str(i['piattaforma']))
+                        print("\n" + str(i["IDfilm"]) + '. ' + str(i['titolo']) + ': ' + str(i['piattaforma']))
                     else:
                         continue
             elif flag == "serietv":
                 for i in lista:
                     if flag in i['tipo']:
-                        print("\n" + str(i["IDserie"]) + '. ' + str(i['titolo']) + ' Piattaforma/e: ' + str(i['piattaforma']))
+                        print("\n" + str(i["IDserie"]) + '. ' + str(i['titolo']) + ': ' + str(i['piattaforma']))
                     else:
                         continue
             print("\n")
@@ -298,4 +300,51 @@ while program:
                 menu = True
             else:
                 print("Inserisci un valore corretto!")
+
+    #MENU TITOLO CASUALE
+    if comando == 5:
+        if not lista:
+            with open(filename, 'rb') as textfile:
+                lista = pickle.load(textfile)
+
+        randlist = []
+        contatore = 1
+
+        if flag == "film":
+            for i in lista:
+                if flag in i['tipo']:
+                    randlist.append(i['IDfilm'])
+        if flag == "serietv":
+            for i in lista:
+                if flag in i['tipo']:
+                    randlist.append(str(i['IDserie']))
+
+        elemento = random.choice(randlist)
+        elemento = str(elemento)
+
+        if flag == "film":
+            for i in lista:
+                if flag in i['tipo'] and elemento in str(i['IDfilm']):
+                    print("\t"+ str(i['titolo']) + ": " + str(i['piattaforma']))
+
+
+        elif flag == "serietv":
+            for i in lista:
+                if flag in i['tipo'] and elemento in i['IDfilm']:
+                    print("\t"+ str(i['titolo']) + ": " + str(i['piattaforma']))
+
+
+        unaltro = input("Estrarre un nuovo elemento? (Y/N)\n")
+        if unaltro == 'y' or unaltro == 'Y':
+            continue
+
+        elif unaltro == 'n' or unaltro == 'N':
+            menu = True
+            comando = 0
+            comandomenu = 1
+
+
+    if comando == 6:
+        menu = True
+        continue
 
