@@ -50,12 +50,18 @@ while program:
               "3. Esci")
 
         comandomenu = input("Seleziona un'azione:\n")
-        if comandomenu != "1" and comandomenu != "2" and comandomenu != "3":
+
+        try:
+            comandomenu = int(comandomenu)
+        except:
+            comandomenu = -1
+        if comandomenu < 0:
             print("Inserisci un valore corretto!\n")
             continue
-        else:
-            comandomenu = int(comandomenu)
+        elif comandomenu > 0 and comandomenu < 4:
             wait = True
+        else:
+            print("Inserisci un valore corretto!\n")
 
 
         #MENU FILM
@@ -70,31 +76,40 @@ while program:
                         "6. Torna al menu principale")
 
                 comando = input("Seleziona un'azione:\n")
-                if comando != "1" and comando != "2" and comando != "3" and comando != "4" and comando != "5" and comando != "6":
+                try:
+                    comando = int(comando)
+                except:
+                    comando = -1
+                if comando < 0:
                     print("Inserisci un valore corretto!\n")
                     continue
-                else:
-                    comando = int(comando)
+                elif comando > 0 and comando < 7:
                     wait = False
                     menu = False
                     comandomenu == 0
+                else:
+                    print("Inserisci un valore corretto!\n")
 
         #MENU SERIE TV
         elif comandomenu == 2:
             flag = "serietv"
             while wait:
                 print("\n1. Aggiungi una serie TV alla lista\n" +
-                    "2. Visualizza la lista\n" +
+                        "2. Visualizza la lista\n" +
                         "3. Cerca nella lista\n" +
                         "4. Rimuovi elementi dalla lista\n" +
-                        "5 Torna al menu\n")
+                        "5. Estrai un titolo casuale\n" +
+                        "6. Torna al menu\n")
 
                 comando = input("Seleziona un'azione:\n")
-                if comando != "1" and comando != "2" and comando != "3" and comando != "4" and comando != "5":
-                    print("Inserisci un valore corretto!")
-                    continue
-                else:
+                try:
                     comando = int(comando)
+                except:
+                    comando = -1
+                if comando < 0:
+                    print("Inserisci un valore corretto!\n")
+                    continue
+                elif comando > 0 and comando < 7:
                     wait = False
                     menu = False
                     comandomenu == 0
@@ -131,13 +146,20 @@ while program:
         while menustampa:
             print("\n1. Stampa tutti i titoli\n" + "2. Torna al menu principale" )
             comandostampa = input("Seleziona un'azione:\n")
-            if comandostampa != "1" and comandostampa != "2" and comandostampa != "3":
+
+            try:
+                comandostampa = int(comandostampa)
+            except:
+                comandostampa = -1
+
+            if comandostampa < 0:
                 print("Inserisci un valore corretto!")
                 continue
-            else:
-                comandostampa = int(comandostampa)
+            elif comandostampa > 0 and comandostampa < 3:
                 menustampa = False
                 continue
+            else:
+                print("Inserisci un valore corretto!\n")
 
         #STAMPA LISTA
         if comandostampa == 1:
@@ -169,27 +191,33 @@ while program:
         while menucerca:
             print("\n1. Cerca per titolo\n" + "2. Cerca per piattaforma\n" + "3. Torna al menu principale\n")
             comandocerca = input("Seleziona un'azione:\n")
-            if comandocerca != "1" and comandocerca != "2" and comandocerca != "3":
+            try:
+                comandocerca = int(comandocerca)
+            except:
+                comandocerca = -1
+            if comandocerca < 0:
                 print("Inserisci un valore corretto!\n")
                 continue
-            else:
-                comandocerca = int(comandocerca)
+            elif comandocerca > 0 and comandocerca < 4:
                 menucerca = False
                 continue
+            else:
+                print("Inserisci un valore corretto!\n")
 
         # CERCA PER TITOLO
         if comandocerca == 1:
             trovato = False
             menucerca = True
+
             ricerca = input("Digita il titolo\n")
             ricerca = str(ricerca)
             ricerca = ricerca.casefold()  # rimuovo la dipendenza dal case sensitive
-            print("I risultati per" + "'" + str(ricerca) + "'" + "sono i seguenti:\n")
+            print("I risultati per " + "'" + str(ricerca) + "'" + " sono i seguenti:\n")
 
             for y in lista:
                 titolotemp = str(y["titolo"])
                 titolotemp = titolotemp.casefold()
-                if ricerca in titolotemp:
+                if ricerca in titolotemp and flag in str(y['tipo']):
                     trovato = True
                     print("\t" + str(y["titolo"]) + ": " + str(y["piattaforma"]))
             if trovato == False:
@@ -200,24 +228,26 @@ while program:
         if comandocerca == 2:
             trovato = False
             menucerca = True
+
             ricerca = input("Digita il nome della piattaforma\n")
             ricerca = str(ricerca)
             ricerca = ricerca.casefold() #rimuovo la dipendenza dal case sensitive
+
             print("I titoli disponibili su " + "'" + str(ricerca) + "'" + " sono i seguenti:\n")
 
             for y in lista:
-                if flag in y["tipo"]:  #distinguo i film dalle serie
-                    piattatemp = str(y["piattaforma"])
-                    piattatemp = piattatemp.casefold()
-                    if ricerca in piattatemp:
-                        trovato = True
-                        print("\t" + str(y["titolo"]))
-                    if trovato == False:
-                        print("Nessun risultato.\n")
-                    else:
-                        continue
-                else:
-                    continue
+
+                piattatemp = str(y["piattaforma"])
+                piattatemp = piattatemp.casefold()
+
+                if ricerca in piattatemp and flag in str(y['tipo']):
+                    trovato = True
+                    print("\t" + str(y["titolo"]))
+            if trovato == False:
+                print("Nessun risultato.\n")
+            else:
+                continue
+
 
         if comandocerca == 3:
             menucerca = False
@@ -238,13 +268,13 @@ while program:
 
             # AGGIORNO DI NUOVO ID DEI TITOLI
             # QUANDO CANCELLO UN TITOLO NEL MEZZO DELLA LISTA HO BISOGNO DI RISCALARE TUTTI I TITOLI SUCCESSIVI DI UNA POSIZIONE IN ALTO!
-            if flag in i['tipo']:
+            if flag == 'film' and flag in i['tipo']:
                 if i['IDfilm'] != IDtempfilm:
                     i['IDfilm'] = IDtempfilm
                     IDtempfilm += 1
                 else:
                     IDtempfilm += 1
-            elif flag in i['tipo']:
+            elif flag == 'serietv' and flag in i['tipo']:
                 if i['IDserie'] != IDtempserie:
                     i['IDserie'] = IDtempserie
                     IDtempserie += 1
@@ -330,7 +360,7 @@ while program:
 
         elif flag == "serietv":
             for i in lista:
-                if flag in i['tipo'] and elemento in i['IDfilm']:
+                if flag in i['tipo'] and elemento in str(i['IDserie']):
                     print("\t"+ str(i['titolo']) + ": " + str(i['piattaforma']))
 
 
